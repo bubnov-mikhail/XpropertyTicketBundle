@@ -3,12 +3,17 @@
 namespace Hackzilla\Bundle\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Message
  *
  * @ORM\Table(name="ticket_message")
  * @ORM\Entity(repositoryClass="Hackzilla\Bundle\TicketBundle\Entity\TicketMessageRepository")
+ * @Vich\Uploadable
  */
 class TicketMessage
 {
@@ -29,39 +34,56 @@ class TicketMessage
 
     /**
      * @var integer
-     * 
-     * @ORM\Column(name="user_id", type="integer")
+     *
+     * @ORM\Column(name="user_id", type="guid")
      */
     protected $user;
     protected $userObject;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="message", type="text", nullable=true)
+     * @Assert\NotBlank()
      */
     protected $message;
 
     /**
-     * @var smallint
-     * 
+     * @var integer
+     *
      * @ORM\Column(name="status", type="smallint")
      */
     protected $status;
 
     /**
-     * @var smallint
-     * 
+     * @var integer
+     *
      * @ORM\Column(name="priority", type="smallint")
      */
     protected $priority;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * NOTE: This field is not persisted to database!
+     *
+     * @var File $file
+     *
+     * @Vich\UploadableField(mapping="ticket_attachment", fileNameProperty="filename")
+     */
+    protected $file;
+
+    /**
+     * @var string $filename
+     *
+     * @ORM\Column(name="filename", type="string", length=255, nullable=true)
+     */
+    protected $filename;
 
     const STATUS_INVALID = 0;
     const STATUS_OPEN = 10;
@@ -101,7 +123,7 @@ class TicketMessage
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -111,7 +133,9 @@ class TicketMessage
     /**
      * Set status
      *
-     * @param smallint $status
+     * @param integer $status
+     *
+     * @return $this
      */
     public function setStatus($status)
     {
@@ -123,6 +147,8 @@ class TicketMessage
      * Set status string
      *
      * @param string $status
+     *
+     * @return $this
      */
     public function setStatusString($status)
     {
@@ -138,7 +164,7 @@ class TicketMessage
     /**
      * Get status
      *
-     * @return smallint
+     * @return integer
      */
     public function getStatus()
     {
@@ -162,7 +188,9 @@ class TicketMessage
     /**
      * Set priority
      *
-     * @param smallint $priority
+     * @param integer $priority
+     *
+     * @return $this
      */
     public function setPriority($priority)
     {
@@ -175,6 +203,8 @@ class TicketMessage
      * Set priority string
      *
      * @param string $priority
+     *
+     * @return $this
      */
     public function setPriorityString($priority)
     {
@@ -190,7 +220,7 @@ class TicketMessage
     /**
      * Get priority
      *
-     * @return smallint
+     * @return integer
      */
     public function getPriority()
     {
@@ -215,7 +245,8 @@ class TicketMessage
      * Set user
      *
      * @param integer|object $user
-     * @return Message
+     *
+     * @return $this
      */
     public function setUser($user)
     {
@@ -233,7 +264,7 @@ class TicketMessage
     /**
      * Get user
      *
-     * @return integer 
+     * @return integer
      */
     public function getUser()
     {
@@ -243,7 +274,7 @@ class TicketMessage
     /**
      * Get user object
      *
-     * @return object 
+     * @return object
      */
     public function getUserObject()
     {
@@ -254,7 +285,8 @@ class TicketMessage
      * Set message
      *
      * @param string $message
-     * @return Message
+     *
+     * @return $this
      */
     public function setMessage($message)
     {
@@ -266,7 +298,7 @@ class TicketMessage
     /**
      * Get message
      *
-     * @return string 
+     * @return string
      */
     public function getMessage()
     {
@@ -277,9 +309,10 @@ class TicketMessage
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Message
+     *
+     * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -289,7 +322,7 @@ class TicketMessage
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -300,18 +333,25 @@ class TicketMessage
      * Set ticket
      *
      * @param \Hackzilla\Bundle\TicketBundle\Entity\Ticket $ticket
-     * @return Message
+     *
+     * @return $this
      */
-    public function setTicket(\Hackzilla\Bundle\TicketBundle\Entity\Ticket $ticket = null)
+    public function setTicket(Ticket $ticket = null)
     {
         $this->ticket = $ticket;
 
-        // if null, then new ticket
-        if (\is_null($ticket->getUserCreated())) {
-            $ticket->setUserCreated($this->getUser());
+        if (\is_null($this->getUserObject())) {
+            $user = $this->getUser();
+        } else {
+            $user = $this->getUserObject();
         }
 
-        $ticket->setLastUser($this->getUser());
+        // if null, then new ticket
+        if (\is_null($ticket->getUserCreated())) {
+            $ticket->setUserCreated($user);
+        }
+
+        $ticket->setLastUser($user);
         $ticket->setLastMessage($this->getCreatedAt());
         $ticket->setPriority($this->getPriority());
 
@@ -328,10 +368,49 @@ class TicketMessage
     /**
      * Get ticket
      *
-     * @return \Hackzilla\Bundle\TicketBundle\Entity\Ticket 
+     * @return Ticket
      */
     public function getTicket()
     {
         return $this->ticket;
+    }
+
+    /**
+     * @return File
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File|UploadedFile $file
+     */
+    public function setFile(File $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get filename
+     *
+     * @return string
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * Set filename
+     *
+     * @param string $filename
+     * @return Ticket
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+
+        return $this;
     }
 }

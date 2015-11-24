@@ -1,5 +1,7 @@
-Ticketing Bundle
-================
+Ticketing Bundle v1
+===================
+
+Latest version. See 0.9 for [previous version](https://github.com/hackzilla/TicketBundle/tree/0.9.x).
 
 Simple multilingual ticketing bundle to add to any project.
 Languages: English, French, Russian, German and Spanish.
@@ -12,8 +14,12 @@ Requirements
 
 * FOSUserBundle
 * Knp Paginator
-* Bootstrap v3 (optional) see: https://github.com/hackzilla/bootstrap-bundle
+* Bootstrap v3 (optional) see: http://symfony.com/blog/new-in-symfony-2-6-bootstrap-form-theme
 
+Demo
+----
+
+See [Ticket Bundle Demo App](https://github.com/hackzilla/TicketBundleDemoApp) for an example installation.  This can also be used for confirming bugs.
 
 Installation
 ------------
@@ -23,12 +29,14 @@ Add HackzillaTicketBundle in your composer.json:
 ```json
 {
     "require": {
-        "hackzilla/ticket-bundle": "~0.8",
-        "hackzilla/fosuser-bridge-bundle": "~1.0.0",
+        "hackzilla/ticket-bundle": "~1.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
     }
 }
 ```
+
+Follow [FOSUserBundle guide](https://github.com/FriendsOfSymfony/FOSUserBundle)
+
 
 Install Composer
 
@@ -57,8 +65,9 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
+        new FOS\UserBundle\FOSUserBundle(),
         new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-        new Hackzilla\Bundle\FOSUserBridgeBundle\HackzillaFOSUserBridgeBundle(),
+        new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         new Hackzilla\Bundle\TicketBundle\HackzillaTicketBundle(),
         // ...
         // Your application bundles
@@ -74,9 +83,17 @@ hackzilla_ticket:
     prefix:   /
 ```
 
+or 
+
+``` yml
+hackzilla_ticket:
+    resource: "@HackzillaTicketBundle/Resources/config/routing/ticket.yml"
+    prefix:   /ticket
+```
+
 ### Step 4: Roles
 
-All users can create tickets.
+All users can create tickets, even anonymous users.
 You can assign ROLE_TICKET_ADMIN to any user you want to be able to administer the ticketing system.
 
 ### Step 5: Create tables
@@ -98,9 +115,22 @@ See for example of how to create listener: http://symfony.com/doc/current/cookbo
 Change Log
 ----------
 
-0.7 - TicketType and TicketMessageType have been moved into Form/Type folder.
-0.9 - New template, and schema changes
+0.7
+* TicketType and TicketMessageType have been moved into Form/Type folder.
 
+0.9
+* New template, and schema changes
+
+1.0
+* Moved UserInterface into bundle
+* Moved Ticket Manager to its own namespace
+
+
+Migrating to 1.0
+----------------
+
+* remove new Hackzilla\Bundle\FOSUserBridgeBundle\HackzillaFOSUserBridgeBundle() from AppKernel.php
+* remove hackzilla/fosuser-bridge-bundle from composer.json
 
 Pull Requests
 -------------

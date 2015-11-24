@@ -15,10 +15,11 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.3",
+        "sensio/framework-extra-bundle": "~3.0",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
-        "hackzilla/interfaces": "~1.0",
-        "knplabs/knp-paginator-bundle": "~2.3"
+        "knplabs/knp-paginator-bundle": "~2.3",
+        "vich/uploader-bundle": "^0.14.0"
     },
     "require-dev": {
         "symfony/form": "~2.3"
@@ -33,7 +34,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

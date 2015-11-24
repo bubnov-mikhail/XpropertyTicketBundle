@@ -14,7 +14,7 @@ use Hackzilla\Bundle\TicketBundle\Entity\TicketMessage;
  */
 class TicketRepository extends EntityRepository
 {
-    public function getTicketList($userManager, $ticketStatus)
+    public function getTicketList($userManager, $ticketStatus, $ticketPriority = null)
     {
         $query = $this->createQueryBuilder('t')
             ->orderBy('t.lastMessage', 'DESC');
@@ -34,12 +34,25 @@ class TicketRepository extends EntityRepository
                     ->setParameter('status', TicketMessage::STATUS_CLOSED);
         }
         
+        if ($ticketPriority) {
+            $query
+                ->andWhere('t.priority = :priority')
+                ->setParameter('priority', $ticketPriority);
+        }
+        
         $user = $userManager->getCurrentUser();
 
-        if (\is_object($user) && !$userManager->isGranted($user, 'ROLE_TICKET_ADMIN')) {
+        if (\is_object($user)) {
+            if (!$userManager->isGranted($user, 'ROLE_TICKET_ADMIN')) {
+                $query
+                    ->andWhere('t.userCreated = :userId')
+                    ->setParameter('userId', $user->getId());
+            }
+        } else {
+            # anonymous user
             $query
                 ->andWhere('t.userCreated = :userId')
-                ->setParameter('userId', $user->getId());
+                ->setParameter('userId', 0);
         }
 
         return $query;

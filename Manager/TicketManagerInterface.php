@@ -1,6 +1,8 @@
 <?php
 
-namespace Hackzilla\Bundle\TicketBundle\Entity;
+namespace Hackzilla\Bundle\TicketBundle\Manager;
+
+use Hackzilla\Bundle\TicketBundle\Entity\Ticket;
 
 interface TicketManagerInterface
 {

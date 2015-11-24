@@ -4,6 +4,7 @@ namespace Hackzilla\Bundle\TicketBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ticket
@@ -25,42 +26,43 @@ class Ticket
 
     /**
      * @var integer
-     * 
-     * @ORM\Column(name="user_created_id", type="integer")
+     *
+     * @ORM\Column(name="user_created_id", type="guid")
      */
     protected $userCreated;
     protected $userCreatedObject;
 
     /**
      * @var integer
-     * 
-     * @ORM\Column(name="last_user_id", type="integer")
+     *
+     * @ORM\Column(name="last_user_id", type="guid")
      */
     protected $lastUser;
     protected $lastUserObject;
 
     /**
-     * @var datetime
-     * 
+     * @var \DateTime
+     *
      * @ORM\Column(name="last_message", type="datetime")
      */
     protected $lastMessage;
 
     /**
      * @ORM\Column(name="subject", type="string", length=255)
+     * @Assert\NotBlank()
      */
     protected $subject;
 
     /**
-     * @var smallint
-     * 
+     * @var integer
+     *
      * @ORM\Column(name="status", type="smallint")
      */
     protected $status;
 
     /**
-     * @var smallint
-     * 
+     * @var integer
+     *
      * @ORM\Column(name="priority", type="smallint")
      */
     protected $priority;
@@ -71,7 +73,7 @@ class Ticket
     protected $messages;
 
     /**
-     * @var datetime
+     * @var integer
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -86,7 +88,7 @@ class Ticket
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -96,7 +98,7 @@ class Ticket
     /**
      * Set status
      *
-     * @param smallint $status
+     * @param integer $status
      */
     public function setStatus($status)
     {
@@ -120,7 +122,7 @@ class Ticket
     /**
      * Get status
      *
-     * @return smallint
+     * @return integer
      */
     public function getStatus()
     {
@@ -144,7 +146,7 @@ class Ticket
     /**
      * Set priority
      *
-     * @param smallint $priority
+     * @param integer $priority
      */
     public function setPriority($priority)
     {
@@ -158,7 +160,7 @@ class Ticket
      */
     public function setPriorityString($priority)
     {
-        $priority = \array_search(\strtolower($priority), self::$priorities);
+        $priority = \array_search(\strtolower($priority), TicketMessage::$priorities);
 
         if ($priority > 0) {
             $this->setPriority($priority);
@@ -168,7 +170,7 @@ class Ticket
     /**
      * Get priority
      *
-     * @return smallint
+     * @return integer
      */
     public function getPriority()
     {
@@ -211,7 +213,7 @@ class Ticket
     /**
      * Get userCreated
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserCreated()
     {
@@ -232,6 +234,7 @@ class Ticket
      * Set lastUser
      *
      * @param integer|object $lastUser
+     *
      * @return Ticket
      */
     public function setLastUser($lastUser)
@@ -250,7 +253,7 @@ class Ticket
     /**
      * Get lastUser
      *
-     * @return integer 
+     * @return integer
      */
     public function getLastUser()
     {
@@ -271,6 +274,7 @@ class Ticket
      * Set lastMessage
      *
      * @param \DateTime $lastMessage
+     *
      * @return Ticket
      */
     public function setLastMessage($lastMessage)
@@ -283,7 +287,7 @@ class Ticket
     /**
      * Get lastMessage
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastMessage()
     {
@@ -294,6 +298,7 @@ class Ticket
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return Ticket
      */
     public function setCreatedAt($createdAt)
@@ -306,7 +311,7 @@ class Ticket
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -317,6 +322,7 @@ class Ticket
      * Set subject
      *
      * @param string $subject
+     *
      * @return Ticket
      */
     public function setSubject($subject)
@@ -329,7 +335,7 @@ class Ticket
     /**
      * Get subject
      *
-     * @return string 
+     * @return string
      */
     public function getSubject()
     {
@@ -339,10 +345,11 @@ class Ticket
     /**
      * Add messages
      *
-     * @param \Hackzilla\Bundle\TicketBundle\Entity\TicketMessage $messages
+     * @param TicketMessage $messages
+     *
      * @return Ticket
      */
-    public function addMessage(\Hackzilla\Bundle\TicketBundle\Entity\TicketMessage $messages)
+    public function addMessage(TicketMessage $messages)
     {
         $this->messages[] = $messages;
 
@@ -352,9 +359,9 @@ class Ticket
     /**
      * Remove messages
      *
-     * @param \Hackzilla\Bundle\TicketBundle\Entity\TicketMessage $messages
+     * @param TicketMessage $messages
      */
-    public function removeMessage(\Hackzilla\Bundle\TicketBundle\Entity\TicketMessage $messages)
+    public function removeMessage(TicketMessage $messages)
     {
         $this->messages->removeElement($messages);
     }
@@ -362,7 +369,7 @@ class Ticket
     /**
      * Get messages
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMessages()
     {
