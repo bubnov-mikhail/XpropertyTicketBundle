@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('new')->defaultValue('HackzillaTicketBundle:Ticket:new.html.twig')->end()
                         ->scalarNode('prototype')->defaultValue('HackzillaTicketBundle:Ticket:prototype.html.twig')->end()
                         ->scalarNode('show')->defaultValue('HackzillaTicketBundle:Ticket:show.html.twig')->end()
+                        ->scalarNode('macros')->defaultValue('HackzillaTicketBundle:Ticket:macros.html.twig')->end()
                     ->end()
                 ->end()
             ->end();
