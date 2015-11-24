@@ -107,10 +107,10 @@ config.yml
 
 hackzilla_ticket:
     templates: 
-        index: 'iBeekeeperTicketBundle:Ticket:index.html.twig'
-        new: 'iBeekeeperTicketBundle:Ticket:new.html.twig'
-        prototype: 'iBeekeeperTicketBundle:Ticket:prototype.html.twig'
-        show: 'iBeekeeperTicketBundle:Ticket:show.html.twig'
+        index: 'YOURTicketBundle:Ticket:index.html.twig'
+        new: 'YOURTicketBundle:Ticket:new.html.twig'
+        prototype: 'YOURTicketBundle:Ticket:prototype.html.twig'
+        show: 'YOURTicketBundle:Ticket:show.html.twig'
 ```
 
 Events
