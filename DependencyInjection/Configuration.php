@@ -18,8 +18,23 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('hackzilla_ticket');
+        $rootNode = $treeBuilder->root('hackzilla_ticket');
 
+        $rootNode
+            ->children()
+                ->arrayNode('templates')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode('index')->defaultValue('HackzillaTicketBundle:Ticket:index.html.twig')->end()
+                        ->scalarNode('new')->defaultValue('HackzillaTicketBundle:Ticket:new.html.twig')->end()
+                        ->scalarNode('prototype')->defaultValue('HackzillaTicketBundle:Ticket:prototype.html.twig')->end()
+                        ->scalarNode('show')->defaultValue('HackzillaTicketBundle:Ticket:show.html.twig')->end()
+                    ->end()
+                ->end()
+            ->end();
+        
         return $treeBuilder;
     }
+    
 }
