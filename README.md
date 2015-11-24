@@ -100,6 +100,19 @@ You can assign ROLE_TICKET_ADMIN to any user you want to be able to administer t
 
 ```app/console doctrine:schema:update --force```
 
+### Step 6: Set custom templates (Optional)
+
+```
+config.yml
+
+hackzilla_ticket:
+    templates: 
+        index: 'iBeekeeperTicketBundle:Ticket:index.html.twig'
+        new: 'iBeekeeperTicketBundle:Ticket:new.html.twig'
+        prototype: 'iBeekeeperTicketBundle:Ticket:prototype.html.twig'
+        show: 'iBeekeeperTicketBundle:Ticket:show.html.twig'
+```
+
 Events
 ------
 
