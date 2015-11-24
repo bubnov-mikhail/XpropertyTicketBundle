@@ -111,6 +111,7 @@ hackzilla_ticket:
         new: 'YOURTicketBundle:Ticket:new.html.twig'
         prototype: 'YOURTicketBundle:Ticket:prototype.html.twig'
         show: 'YOURTicketBundle:Ticket:show.html.twig'
+        macros: 'YOURTicketBundle:Macros:macros.html.twig'
 ```
 
 Events
