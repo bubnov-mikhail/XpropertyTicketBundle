@@ -27,15 +27,14 @@ class TicketController extends Controller
     {
         $userManager = $this->get('hackzilla_ticket.user');
         $translator = $this->get('translator');
-        
+
         $ticketState = $request->get('state', $translator->trans('STATUS_OPEN'));
-        $ticketPriority = $request->get('priority', null);
 
         $repositoryTicket = $this->getDoctrine()->getRepository('HackzillaTicketBundle:Ticket');
 
         $repositoryTicketMessage = $this->getDoctrine()->getRepository('HackzillaTicketBundle:TicketMessage');
 
-        $query = $repositoryTicket->getTicketList($userManager, $repositoryTicketMessage->getTicketStatus($translator, $ticketState), $repositoryTicketMessage->getTicketPriority($translator, $ticketPriority));
+        $query = $repositoryTicket->getTicketList($userManager, $repositoryTicketMessage->getTicketStatus($translator, $ticketState));
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
@@ -43,12 +42,12 @@ class TicketController extends Controller
             $request->query->get('page', 1)/*page number*/,
             10/*limit per page*/
         );
-
-        return $this->render('HackzillaTicketBundle:Ticket:index.html.twig', array(
+        
+        return $this->render($this->container->getParameter('hackzilla_ticket.templates.index'), array(
                     'pagination' => $pagination,
                     'ticketState' => $ticketState,
-                    'ticketPriority' => $ticketPriority,
         ));
+        
     }
 
     /**
@@ -81,7 +80,7 @@ class TicketController extends Controller
             return $this->redirect($this->generateUrl('hackzilla_ticket_show', array('id' => $ticket->getId())));
         }
 
-        return $this->render('HackzillaTicketBundle:Ticket:new.html.twig', array(
+        return $this->render($this->container->getParameter('hackzilla_ticket.templates.new'), array(
                     'entity' => $ticket,
                     'form' => $form->createView(),
         ));
@@ -97,7 +96,7 @@ class TicketController extends Controller
         $userManager = $this->get('hackzilla_ticket.user');
         $form = $this->createForm(new TicketType($userManager), $entity);
 
-        return $this->render('HackzillaTicketBundle:Ticket:new.html.twig', array(
+        return $this->render($this->container->getParameter('hackzilla_ticket.templates.new'), array(
                     'entity' => $entity,
                     'form' => $form->createView(),
         ));
@@ -132,7 +131,7 @@ class TicketController extends Controller
             $data['delete_form'] = $this->createDeleteForm($ticket->getId())->createView();
         }
 
-        return $this->render('HackzillaTicketBundle:Ticket:show.html.twig', $data);
+        return $this->render($this->container->getParameter('hackzilla_ticket.templates.show'), $data);
     }
 
     /**
