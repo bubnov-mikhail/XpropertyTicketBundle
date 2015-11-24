@@ -164,7 +164,7 @@
             </trans-unit>
             <trans-unit id="128">
                 <source>LABEL_MARK_SOLVED</source>
-                <target>identifizieren als gelöst</target>
+                <target>als gelöst markieren</target>
             </trans-unit>
             <trans-unit id="129">
                 <source>LABEL_ENTER_DETAILS</source>
