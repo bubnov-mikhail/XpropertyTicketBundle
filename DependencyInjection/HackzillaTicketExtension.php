@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class HackzillaTicketExtension extends Extension
 {
+   
     /**
      * {@inheritDoc}
      */
@@ -30,6 +31,7 @@ class HackzillaTicketExtension extends Extension
         $container->setParameter('hackzilla_ticket.templates.new', $config['templates']['new']);
         $container->setParameter('hackzilla_ticket.templates.prototype', $config['templates']['prototype']);
         $container->setParameter('hackzilla_ticket.templates.show', $config['templates']['show']);
+        $container->setParameter('hackzilla_ticket.templates.macros', $config['templates']['macros']);
         
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
