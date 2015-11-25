@@ -47,8 +47,11 @@
             </span>
         </div>
         <div class="panel-body">
-            {{ message.message|nl2br }}<br>
-            <img src="{{ vich_uploader_asset( message, 'file') }}" />
+            {{ message.message|nl2br }}
+            {% if(message.filename) %}
+                <br>
+                <img src="{{ vich_uploader_asset( message, 'file') }}" />
+            {% endif %}
         </div>
     </div>
     {% endif %}
