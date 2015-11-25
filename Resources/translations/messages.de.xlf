@@ -22,7 +22,7 @@
             </trans-unit>
             <trans-unit id="5">
                 <source>STATUS_RESOLVED</source>
-                <target>gelöst</target>
+                <target>erledigt</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>STATUS_CLOSED</source>
@@ -96,7 +96,7 @@
             </trans-unit>
             <trans-unit id="91">
                 <source>HEADING_LAST_MODIFIED</source>
-                <target>Vorig Änderung</target>
+                <target>Vorherige Änderung</target>
             </trans-unit>
             <trans-unit id="92">
                 <source>HEADING_AUTHOR</source>
@@ -164,7 +164,7 @@
             </trans-unit>
             <trans-unit id="128">
                 <source>LABEL_MARK_SOLVED</source>
-                <target>als gelöst markieren</target>
+                <target>als erledigt markieren</target>
             </trans-unit>
             <trans-unit id="129">
                 <source>LABEL_ENTER_DETAILS</source>
