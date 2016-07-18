@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Xproperty\ServiceBundle\Interfaces\UserFileInterface;
 
 /**
  * Message
@@ -15,7 +16,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="Hackzilla\Bundle\TicketBundle\Entity\TicketMessageRepository")
  * @Vich\Uploadable
  */
-class TicketMessage
+class TicketMessage implements UserFileInterface
 {
     /**
      * @var integer
@@ -74,7 +75,7 @@ class TicketMessage
      *
      * @var File $file
      *
-     * @Vich\UploadableField(mapping="ticket_attachment", fileNameProperty="filename")
+     * @Vich\UploadableField(mapping="user_file", fileNameProperty="filename")
      */
     protected $file;
 
@@ -389,6 +390,9 @@ class TicketMessage
     public function setFile(File $file = null)
     {
         $this->file = $file;
+        if($file) {
+            $this->setCreatedAt(new \DateTime('now'));
+        }
     }
 
     /**
@@ -412,5 +416,57 @@ class TicketMessage
         $this->filename = $filename;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVichFileUploadConfigName()
+    {
+        return 'file';
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return getFilename();
+    }
+
+    /**
+     * @param String $filepath
+     * @return \Symfony\Component\HttpFoundation\File\File
+     */
+    public function setFilePath($filepath)
+    {
+        return $this->setFilename($filepath);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\File\File
+     */
+    public function getUploadedFile()
+    {
+        return $this->getFile();
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @return \Xproperty\ServiceBundle\Interfaces\UserFileInterface
+     */
+    public function setUploadedFile(File $file = null)
+    {
+        $this->setFile($file);
+
+        return $this;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\File\File $uploadedFile
+     */
+    public function injectUploadedFile(File $uploadedFile = null)
+    {
+        $this->setUploadedFile($uploadedFile);
     }
 }
