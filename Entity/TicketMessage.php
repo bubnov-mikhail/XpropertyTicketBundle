@@ -431,7 +431,7 @@ class TicketMessage implements UserFileInterface
      */
     public function getFilePath()
     {
-        return getFilename();
+        return $this->getFilename();
     }
 
     /**
