@@ -1,10 +1,10 @@
 <?php
 
 namespace Hackzilla\Bundle\TicketBundle\Component\TwigExtension;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
-class TicketGlobalExtension extends \Twig_Extension
+class TicketGlobalExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      *
